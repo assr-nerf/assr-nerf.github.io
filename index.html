@@ -446,20 +446,20 @@
                                 <div class="column is-four-fifths">
                                     <div class="content has-text-justified">
                                         <p>
-                                            <b>Left:</b> Trained with LR source
-                                            views, ASSR-NeRF is able to render
-                                            HR novel views with rich details.
-                                            <b>Right:</b> ASSR-NeRF adopts
-                                            explict scene representation,
-                                            consisting of voxel grids,
-                                            VoxelGridSR module, and RGBNet for
-                                            view-dependent color decoding.
+                                            Left: Trained with LR source views,
+                                            ASSR-NeRF is able to render HR novel
+                                            views with rich details. Right:
+                                            ASSR-NeRF adopts explict scene
+                                            representation, consisting of voxel
+                                            grids, VoxelGridSR module, and
+                                            RGBNet for view-dependent color
+                                            decoding.
                                             <b
-                                                >VoxelGridSR module is deployed
-                                                to map low-quality scene
-                                                representaions to high-quality
-                                                ones.</b
-                                            >
+                                                >VoxelGridSR module learns the
+                                                mapping between low-quality and
+                                                high-quality scene
+                                                representations.
+                                            </b>
                                         </p>
 
                                         <p>
@@ -662,17 +662,18 @@
                     </div>
                 </div>
 
-                <!-- <div class="columns is-centered has-text-centered">
+                <div class="columns is-centered has-text-centered">
                     <div class="column is-four-fifths">
                         <h2 class="title is-4">Multi-View Consistency</h2>
                         <div class="content has-text-justified">
                             <p>
                                 While rendered LR novel views from SOTA methods
                                 can be super-resolved by 2D image SR, it leads
-                                to multi-view inconsistency. Since our method
-                                applies SR directly on the scene representation,
-                                it strongly guarantees multi-view consistency as
-                                well as rich details.
+                                to multi-view inconsistency (left). Since our
+                                method applies SR directly on the scene
+                                representation, it strongly guarantees
+                                multi-view consistency as well as rich details
+                                (right).
                             </p>
                         </div>
                     </div>
@@ -680,18 +681,19 @@
                 <div class="content has-text-centered">
                     <video
                         id="replay-video"
+                        autoplay
                         controls
                         muted
-                        preload
+                        loop
                         playsinline
                         width="75%"
                     >
                         <source
-                            src="./static/videos/replay.mp4"
+                            src="./static/videos/consistency_compare.mp4"
                             type="video/mp4"
                         />
                     </video>
-                </div> -->
+                </div>
             </div>
         </section>
 
