@@ -188,6 +188,19 @@
                                             <span>Code (coming soon)</span>
                                         </a>
                                     </span>
+                                    <span class="link-block">
+                                        <a
+                                            href="#4k_results"
+                                            class="external-link button is-normal is-rounded is-dark"
+                                        >
+                                            <span class="icon">
+                                                <i
+                                                    class="fa fa-basketball-ball"
+                                                ></i>
+                                            </span>
+                                            <span>Qualitative Results</span>
+                                        </a>
+                                    </span>
                                     <!-- Dataset Link. -->
                                     <!-- <span class="link-block">
                 <a href="https://github.com/google/nerfies/releases/tag/0.1"
@@ -545,6 +558,7 @@
             <div class="container is-max-desktop">
                 <div class="columns is-centered has-text-centered">
                     <div class="column is-four-fifths">
+                        <a id="4k_results"></a>
                         <h2 class="title is-3">Results</h2>
                         <h2 class="title is-4">Rich details in 4K</h2>
                         <div class="content has-text-justified">
@@ -649,6 +663,57 @@
                             >
                                 <source
                                     src="./static/videos/trex_compare.mp4"
+                                    type="video/mp4"
+                                />
+                            </video>
+
+                            <p>
+                                <b>Left: </b>SOTA method (TensoRF)
+                                <b>Right: </b>
+                                ASSR-NeRF
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns is-centered">
+                    <!-- Visual Effects. -->
+                    <div class="column">
+                        <div class="content">
+                            <video
+                                id="dollyzoom"
+                                autoplay
+                                controls
+                                muted
+                                loop
+                                playsinline
+                                width="98.7%"
+                            >
+                                <source
+                                    src="./static/videos/fern_vgsr_4k.m4v"
+                                    type="video/mp4"
+                                />
+                            </video>
+
+                            <p>
+                                Trained with views in <b>1K</b>, ASSR-NeRF
+                                renders <b>4K</b> novel veiws.
+                            </p>
+                        </div>
+                    </div>
+                    <!--/ Visual Effects. -->
+                    <div class="column">
+                        <div class="content has-text-centered">
+                            <video
+                                id="dollyzoom"
+                                autoplay
+                                controls
+                                muted
+                                loop
+                                playsinline
+                                width="120%"
+                            >
+                                <source
+                                    src="./static/videos/fern_compare.mp4"
                                     type="video/mp4"
                                 />
                             </video>
