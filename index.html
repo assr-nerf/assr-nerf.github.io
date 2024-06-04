@@ -31,6 +31,21 @@
             gtag("config", "G-0LX9WNKDQ4");
         </script>
 
+        <!-- Google tag (gtag.js) -->
+        <!-- <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-GTRTLBJXZN"
+        ></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag("js", new Date());
+
+            gtag("config", "G-GTRTLBJXZN");
+        </script> -->
+
         <link
             href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
             rel="stylesheet"
@@ -402,29 +417,29 @@
                             <p>
                                 NeRF-based methods reconstruct 3D scenes by
                                 building a radiance field with implicit or
-                                explicit representations. While existing
-                                state-of-the-art methods for 3D scene
-                                reconstruction can capture geometry and
-                                appearance of a scene accurately, the quality of
-                                the rendered novel views is bounded by the
-                                training views. On the other hand, single-image
-                                super-resolution aims to restore lowresolution
-                                (LR) images to high-resolution (HR) counterparts
-                                and enhance details as well as textures
-                                simultaneously. To improve the rendering quality
-                                of a radiance field trained with LR training
-                                views, we propose Arbitrary-Scale
+                                explicit representations. While NeRF-based
+                                methods can perform novel view synthesis (NVS)
+                                at arbitrary scale, the performance in
+                                high-resolution novel view synthesis (HRNVS)
+                                with low-resolution (LR) optimization often
+                                results in oversmoothing. On the other hand,
+                                single-image super-resolution (SR) aims to
+                                enhance LR images to HR counterparts but lacks
+                                multi-view consistency. To address these
+                                challenges, we propose Arbitrary-Scale
                                 Super-Resolution NeRF (ASSR-NeRF), a novel
-                                framework for super-resolution (SR) of neural
-                                radiance field. A voxel-based radiance field is
-                                first constructed with training views. Then, an
-                                attention-based VoxelGridSR module performs SR
-                                directly on the constructed radiance field,
-                                instead of the rendered 2D views, to generate
-                                finer details and textures in rendered views.
-                                Experiments with both quantitative and
-                                qualitative comparisons show that our proposed
-                                method significantly improves rendering quality.
+                                framework for super-resolution novel view
+                                synthesis (SRNVS). We propose an attention-based
+                                VoxelGridSR model to directly perform 3D
+                                super-resolution (SR) on the optimized volume.
+                                Our model is trained on diverse scenes to ensure
+                                generalizability. For unseen scenes trained with
+                                LR views, we then can directly apply our
+                                VoxelGridSR to further refine the volume and
+                                achieve multi-view consistent SR. We demonstrate
+                                quantitative and qualitatively that the proposed
+                                method achieves significant performance in
+                                SRNVS.
                             </p>
                         </div>
                     </div>
@@ -439,7 +454,9 @@
                 <div class="columns is-centered has-text-centered">
                     <div class="column is-four-fifths">
                         <h2 class="title is-3">Methods</h2>
-                        <h2 class="title is-4">Overview</h2>
+                        <h2 class="title is-4">
+                            Radiance Field Super-Resolution
+                        </h2>
                     </div>
                 </div>
                 <!--/ Methods. -->
@@ -453,7 +470,7 @@
                     <div class="column is-centered">
                         <div class="column has-text-centered">
                             <img
-                                src="./static/images/overview.png"
+                                src="./static/images/teaser.png"
                                 class="interpolation-image"
                                 alt="Interpolation end reference image."
                             />
@@ -461,30 +478,16 @@
                                 <div class="column is-four-fifths">
                                     <div class="content has-text-justified">
                                         <p>
-                                            Left: Trained with LR source views,
-                                            ASSR-NeRF is able to render HR novel
-                                            views with rich details. Right:
-                                            ASSR-NeRF adopts explict scene
-                                            representation, consisting of voxel
-                                            grids, VoxelGridSR module, and
-                                            RGBNet for view-dependent color
-                                            decoding.
-                                            <b
-                                                >VoxelGridSR module learns the
-                                                mapping between low-quality and
-                                                high-quality scene
-                                                representations.
-                                            </b>
-                                        </p>
-
-                                        <p>
-                                            Specifically, VoxelGridSR performs
-                                            arbitrary-scale super-resolution
-                                            directly on constructed scene
-                                            representation (voxel grids) through
-                                            self-attention on the queried
-                                            features and densities around a 3D
-                                            point.
+                                            Given a radiance field reconstructed
+                                            from low-resolution (LR) training
+                                            views, we perform radiance field
+                                            super-resolution (SR), where the
+                                            volumetric representation of the
+                                            scene is enhanced utilizing SR
+                                            priors. The enhanced volumetric
+                                            representation can then render
+                                            high-resolution (HR) novel views
+                                            with cleaner details.
                                         </p>
                                     </div>
                                 </div>
@@ -520,12 +523,10 @@
                         </div>
                     </div> -->
                     <div class="column is-centered has-text-centered">
-                        <h2 class="title is-4">
-                            Two-Stage Multi-Scene Training
-                        </h2>
+                        <h2 class="title is-4">Overview of ASSR-NeRF</h2>
                         <div class="column has-text-centered">
                             <img
-                                src="./static/images/training.png"
+                                src="./static/images/overview.png"
                                 class="interpolation-image"
                                 alt="Interpolation end reference image."
                             />
@@ -533,14 +534,68 @@
                                 <div class="column is-four-fifths">
                                     <div class="content has-text-justified">
                                         <p>
-                                            We propose a two-stage multi-scene
-                                            training strategy for ASSR-NeRF with
-                                            paired LR and HR training views. In
-                                            stage 1, representation of every
-                                            scene is constructed with a shared
-                                            pre-trained RGBNet. In stage 2,
-                                            VoxelGridSR is trained among the
-                                            fixed scene representations.
+                                            For any distilled feature field
+                                            reconstructed from LR training views
+                                            (grey part), VoxelGridSR module
+                                            (orange part) performs
+                                            self-attention on the volumetric
+                                            representation and generate refined
+                                            appearance feature and density for
+                                            every sampled point. The refined
+                                            features and densities are then
+                                            aggregated to pixels, leading to
+                                            novel view with rich and clean
+                                            details.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <p >
+                                Trained with LR views, ASSR-NeRF is able to
+                                rander HR novel views with rich details
+                            </p> -->
+                        </div>
+                    </div>
+                    <!--/ Overview. -->
+                </div>
+                <div class="columns is-centered">
+                    <!-- Overview. -->
+                    <!-- <div class="columns is-centered">
+                        <div class="column is-four-fifths">
+                            <h2 class="title is-4">Overview</h2>
+                        </div>
+                    </div> -->
+                    <div class="column is-centered has-text-centered">
+                        <h2 class="title is-4">Distilled Feature Field</h2>
+                        <div class="column has-text-centered">
+                            <img
+                                src="./static/images/dff.png"
+                                class="interpolation-image"
+                                alt="Interpolation end reference image."
+                            />
+                            <div class="columns is-centered has-text-centered">
+                                <div class="column is-four-fifths">
+                                    <div class="content has-text-justified">
+                                        <p>
+                                            We distill features from pre-trained
+                                            feature extractor into volumetric
+                                            representation so that VoxelGridSR
+                                            module can utilize the queried SR
+                                            priors and benefit self-attention.
+                                            In a student-teacher setting,
+                                            features extracted from training
+                                            views are distilled into a 3D
+                                            student network. The student network
+                                            is trained by minimizing the
+                                            difference between rendered features
+                                            and features from pre-trained image
+                                            feature extractor, in addition to
+                                            rendered colors and ground-truth
+                                            pixel colors. FeatureNet turn voxel
+                                            feature into view-dependent
+                                            distilled features, and a
+                                            pre-trained decoder maps
+                                            view-dependent features RGB color
                                         </p>
                                     </div>
                                 </div>
@@ -562,15 +617,39 @@
                     <div class="column is-four-fifths">
                         <a id="4k_results"></a>
                         <h2 class="title is-3">Results</h2>
+                        <h2 class="title is-4">Qualitative Results</h2>
+                        <div class="content has-text-justified">
+                            <p>
+                                Qualitative results on Synthetic-NeRF and
+                                BlendedMVS dataset: All other baselines are
+                                first reconstructed from LR training views, then
+                                perform HRNVS. For ASSR-NeRF, pre-trained
+                                VoxelGridSR model is applied to achieve SRNVS.
+                                The results show that ASSR-NeRF generates
+                                cleaner edges as well as richer details than
+                                other baselines.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <img
+                    src="./static/images/qr_supplementary.png"
+                    class="interpolation-image"
+                    alt="Interpolation end reference image."
+                />
+                <div class="columns is-centered has-text-centered">
+                    <div class="column is-four-fifths">
+                        <a id="4k_results"></a>
                         <h2 class="title is-4">Rich details in 4K</h2>
                         <div class="content has-text-justified">
                             <p>
-                                In this experiment, we compare SOTA methods of
-                                scene reconstruction with ASSR-NeRF. While both
-                                ASSR-NeRF and SOTA methods reconstruct a scene
-                                of training views in <b>1K resolution</b>,
-                                ASSR-NeRF render novel views in
-                                <b>4K resolution</b> with richer details.
+                                In this experiment, we compare other NeRF-based
+                                methods with ASSR-NeRF. While both ASSR-NeRF and
+                                other methods reconstruct a scene of training
+                                views in
+                                <b>1K resolution</b>, ASSR-NeRF render novel
+                                views in <b>4K resolution</b> with richer
+                                details.
                             </p>
                         </div>
                     </div>
@@ -619,7 +698,7 @@
                             </video>
 
                             <p>
-                                <b>Left: </b>SOTA method (DVGO)
+                                <b>Left: </b>SOTA method
                                 <b>Right: </b>
                                 ASSR-NeRF
                             </p>
@@ -670,7 +749,7 @@
                             </video>
 
                             <p>
-                                <b>Left: </b>SOTA method (TensoRF)
+                                <b>Left: </b>SOTA method
                                 <b>Right: </b>
                                 ASSR-NeRF
                             </p>
@@ -721,7 +800,7 @@
                             </video>
 
                             <p>
-                                <b>Left: </b>SOTA method (TensoRF)
+                                <b>Left: </b>SOTA method
                                 <b>Right: </b>
                                 ASSR-NeRF
                             </p>
@@ -729,7 +808,7 @@
                     </div>
                 </div>
 
-                <div class="columns is-centered has-text-centered">
+                <!-- <div class="columns is-centered has-text-centered">
                     <div class="column is-four-fifths">
                         <h2 class="title is-4">Multi-View Consistency</h2>
                         <div class="content has-text-justified">
@@ -764,7 +843,7 @@
                         <b>Right: </b>
                         HR novel views from ASSR-NeRF
                     </p>
-                </div>
+                </div> -->
             </div>
         </section>
 
